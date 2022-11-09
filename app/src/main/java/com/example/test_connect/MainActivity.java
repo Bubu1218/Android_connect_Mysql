@@ -5,8 +5,6 @@ import java.net.URL;
 import android.os.Bundle;
 import java.net.HttpURLConnection;
 import java.io.*;
-
-
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -74,10 +72,19 @@ public class MainActivity extends AppCompatActivity {
                     String box = ""; // 宣告存放用字串
                     String line = null; // 宣告讀取用的字串
                     while((line = bufReader.readLine()) != null) {
-                        box += line + "\n";
+                                box += line + "\n";
                         // 每當讀取出一列，就加到存放字串後面
                     }
                     inputStream.close(); // 關閉輸入串流
+
+                    String getSubstring = box.substring(box.indexOf("京都豆皮壽司"),box.indexOf("京都豆皮壽司")+70);
+                    String[] tokens = getSubstring.split("\"|,|:|熱量|[(]|[)]|kcal|g|食物名稱|蛋白質|脂肪|醣類");
+                    for (String token:tokens) {
+                            System.out.println(token);
+                    }
+                    box=getSubstring;
+
+
                     result = box; // 把存放用字串放到全域變數
                 }
                 // 讀取輸入串流並存到字串的部分
