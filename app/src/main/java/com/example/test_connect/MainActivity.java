@@ -77,10 +77,16 @@ public class MainActivity extends AppCompatActivity {
                     }
                     inputStream.close(); // 關閉輸入串流
 
-                    String getSubstring = box.substring(box.indexOf("京都豆皮壽司"),box.indexOf("京都豆皮壽司")+70);
-                    String[] tokens = getSubstring.split("\"|,|:|熱量|[(]|[)]|kcal|g|食物名稱|蛋白質|脂肪|醣類");
-                    for (String token:tokens) {
-                            System.out.println(token);
+
+
+                    String target="京都豆皮壽司";
+                    int target_len=target.length();
+                    String getSubstring = box.substring(box.indexOf(target)+target_len,box.indexOf(target)+70);
+                    String[] tokens = getSubstring.split("\"|\\s+|,|:|熱量|[(]|[)]|kcal|g|食物名稱|蛋白質|脂肪|醣類|\\{|\\}");
+                    float[] target_data=new float[tokens.length];
+                    for (int i=0;i<tokens.length;i++) {
+                        target_data[i]=Float.parseFloat(tokens[i].isEmpty() ? "-1" : tokens[i]);
+                        System.out.println(target_data[i]);
                     }
                     box=getSubstring;
 
