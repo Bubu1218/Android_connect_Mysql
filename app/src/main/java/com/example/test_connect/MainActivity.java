@@ -58,39 +58,45 @@ public class MainActivity extends AppCompatActivity {
                 connection.setUseCaches(false); // 不使用快取
                 connection.connect(); // 開始連線
 
-                int responseCode =
-                        connection.getResponseCode();
-                // 建立取得回應的物件
-                if(responseCode ==
-                        HttpURLConnection.HTTP_OK){
+                int responseCode = connection.getResponseCode();// 建立取得回應的物件
+                if(responseCode == HttpURLConnection.HTTP_OK){
                     // 如果 HTTP 回傳狀態是 OK ，而不是 Error
-                    InputStream inputStream =
-                            connection.getInputStream();
+                    InputStream inputStream = connection.getInputStream();
                     // 取得輸入串流
                     BufferedReader bufReader = new BufferedReader(new InputStreamReader(inputStream, "utf-8"), 8);
                     // 讀取輸入串流的資料
                     String box = ""; // 宣告存放用字串
                     String line = null; // 宣告讀取用的字串
                     while((line = bufReader.readLine()) != null) {
-                                box += line + "\n";
-                        // 每當讀取出一列，就加到存放字串後面
+                                box += line + "\n"; // 每當讀取出一列，就加到存放字串後面
                     }
                     inputStream.close(); // 關閉輸入串流
 
 
-
-                    String target="京都豆皮壽司";
+                    String target="吳留手-明太子鮭魚烤飯糰";
+                    int data_index=0;
                     int target_len=target.length();
-                    String getSubstring = box.substring(box.indexOf(target)+target_len,box.indexOf(target)+70);
-                    String[] tokens = getSubstring.split("\"|\\s+|,|:|熱量|[(]|[)]|kcal|g|食物名稱|蛋白質|脂肪|醣類|\\{|\\}");
-                    float[] target_data=new float[tokens.length];
-                    for (int i=0;i<tokens.length;i++) {
-                        target_data[i]=Float.parseFloat(tokens[i].isEmpty() ? "-1" : tokens[i]);
+                    float[] target_data=new float[6];
+
+                    String get_substring =
+                            box.substring(box.indexOf(target)+target_len+3,box.indexOf(target)+target_len+56); // 邊界處理很重要!!!
+
+                    String[] target_substring =
+                            get_substring.split("\"|\\s+|,|:|熱量|[(]|[)]|kcal|g|食|物|名|稱|蛋白質|脂肪|醣類|\\{|\\}");
+
+                    for (int i=0;i<target_substring.length;i++) {
+                        target_data[data_index]=Float.parseFloat(target_substring[i].isEmpty() ? "-1" : target_substring[i]); // 空格轉換問題!!!!!
+
+                        if(target_data[data_index]!=-1)
+                            data_index++;
+                    }
+                    /*
+                    for(int i=0;i<4;i++){
                         System.out.println(target_data[i]);
                     }
-                    box=getSubstring;
+                    */
 
-
+                    box=get_substring;
                     result = box; // 把存放用字串放到全域變數
                 }
                 // 讀取輸入串流並存到字串的部分
